@@ -1,0 +1,74 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: rent
+          uri: http://localhost:8081
+          predicates:
+            - Path=/bikeRents/** 
+        - id: garage
+          uri: http://localhost:8082
+          predicates:
+            - Path=/bikes/** 
+        - id: payment
+          uri: http://localhost:8083
+          predicates:
+            - Path=/creditCards/** 
+        - id: viewer
+          uri: http://localhost:8084
+          predicates:
+            - Path=/boards/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: rent
+          uri: http://rent:8080
+          predicates:
+            - Path=/bikeRents/** 
+        - id: garage
+          uri: http://garage:8080
+          predicates:
+            - Path=/bikes/** 
+        - id: payment
+          uri: http://payment:8080
+          predicates:
+            - Path=/creditCards/** 
+        - id: viewer
+          uri: http://viewer:8080
+          predicates:
+            - Path=/boards/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
